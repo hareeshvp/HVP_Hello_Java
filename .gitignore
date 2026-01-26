@@ -1,6 +1,9 @@
+.blackduck
+.bridge
 .classpath
+.codesight
 .idea
 .project
 .settings
-.svn
+.vs
 target
