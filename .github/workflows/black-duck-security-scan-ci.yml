@@ -37,4 +37,4 @@ jobs:
           coverity_clean_command: mvn -B clean
           github_token: ${{ secrets.GITHUB_TOKEN }}
           include_diagnostics: false
-          polaris_test_sast_location: 'local'
+          # polaris_test_sast_location: 'local'
