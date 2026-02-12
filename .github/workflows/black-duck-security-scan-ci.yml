@@ -38,7 +38,6 @@ jobs:
       - name: Black Duck Polaris SAST scan
         uses: blackduck-inc/black-duck-security-scan@805cbd09e806b01907bbea0f990723c2bb85abe9
         with:
-          ### ---------- POLARIS SCANNING: REQUIRED FIELDS ----------
           polaris_server_url: ${{ vars.POLARIS_SERVERURL }}
           polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
           polaris_assessment_types: SAST
@@ -50,7 +49,4 @@ jobs:
           coverity_clean_command: mvn -B clean
           github_token: ${{ secrets.GITHUB_TOKEN }}
           include_diagnostics: false
-
-          #### Uncomment this to use Local Analysis feature
-          # Please use Local Analysis or Source Upload exclusively
           polaris_test_sast_location: 'local'
