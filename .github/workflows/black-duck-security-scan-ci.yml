@@ -1,0 +1,56 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# Black Duck Security Action allows you to integrate Static Analysis Security Testing (SAST) and Software Composition Analysis (SCA) into your CI/CD pipelines.
+# For more information about configuring your workflow,
+# read our documentation at https://github.com/blackduck-inc/black-duck-security-scan
+
+name: CI Black Duck security scan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
+      actions: read
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+      - name: Setup Java JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: temurin
+          cache: maven
+      - name: Black Duck Polaris SAST scan
+        uses: blackduck-inc/black-duck-security-scan@805cbd09e806b01907bbea0f990723c2bb85abe9
+        with:
+          ### ---------- POLARIS SCANNING: REQUIRED FIELDS ----------
+          polaris_server_url: ${{ vars.POLARIS_SERVERURL }}
+          polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
+          polaris_assessment_types: SAST
+          polaris_application_name: chuckaude-${{ github.event.repository.name }}
+          polaris_prComment_enabled: true
+          polaris_reports_sarif_create: true
+          polaris_upload_sarif_report: true
+          coverity_build_command: mvn -B -DskipTests package
+          coverity_clean_command: mvn -B clean
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          include_diagnostics: false
+
+          #### Uncomment this to use Local Analysis feature
+          # Please use Local Analysis or Source Upload exclusively
+          polaris_test_sast_location: 'local'
